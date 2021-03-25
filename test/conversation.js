@@ -19,6 +19,14 @@ describe('conversations', () => {
       done();
     });
   });
+  it('should search', done => {
+    nock('https://api.intercom.io').post('/conversations/search', {query : { field: "tag_ids", operator: "=", value: "1234" }}).reply(200, {});
+    const client = new Client('foo', 'bar').usePromises();
+    client.conversations.search({ query : { field: "tag_ids", operator: "=", value: "1234" }}).then(r => {
+      assert.equal(200, r.statusCode);
+      done();
+    });
+  });
   it('should reply', done => {
     nock('https://api.intercom.io').post('/conversations/bar/reply', { id: 'bar', baz: 'bang' }).reply(200, {});
     const client = new Client('foo', 'bar').usePromises();
